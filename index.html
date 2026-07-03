@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>给 Molly 的 Codex 小白入门课</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --paper: #ffffff;
+      --ink: #182235;
+      --muted: #667085;
+      --line: #dbe3ef;
+      --blue: #2563eb;
+      --blue-soft: #eaf1ff;
+      --mint: #0f766e;
+      --mint-soft: #e7f7f3;
+      --rose: #be123c;
+      --rose-soft: #fff1f2;
+      --amber: #b45309;
+      --amber-soft: #fff7e6;
+      --shadow: 0 14px 32px rgba(22, 34, 53, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      line-height: 1.72;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .hero {
+      background:
+        radial-gradient(circle at 12% 20%, rgba(37, 99, 235, 0.13), transparent 26%),
+        radial-gradient(circle at 88% 8%, rgba(15, 118, 110, 0.12), transparent 26%),
+        linear-gradient(135deg, #ffffff 0%, #eaf1ff 100%);
+      border-bottom: 1px solid var(--line);
+      padding: 56px 18px 44px;
+    }
+
+    .wrap {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border: 1px solid #cfe0ff;
+      border-radius: 999px;
+      color: var(--blue);
+      background: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(34px, 6vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-cards,
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero-cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 28px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card,
+    section,
+    .prompt {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .card { padding: 18px; }
+
+    .card h3 {
+      margin: 10px 0 6px;
+      font-size: 18px;
+    }
+
+    .card p { margin: 0; color: var(--muted); }
+
+    .icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    main {
+      padding: 28px 0 56px;
+    }
+
+    section {
+      padding: 26px;
+      margin: 18px 0;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin: 22px 0 8px;
+      font-size: 18px;
+    }
+
+    p { margin: 10px 0; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+
+    .note {
+      padding: 14px 16px;
+      border-radius: 8px;
+      border-left: 4px solid var(--blue);
+      background: var(--blue-soft);
+      margin: 14px 0;
+    }
+
+    .note.green {
+      border-left-color: var(--mint);
+      background: var(--mint-soft);
+    }
+
+    .note.amber {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .note.rose {
+      border-left-color: var(--rose);
+      background: var(--rose-soft);
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .step {
+      position: relative;
+      padding: 16px 16px 16px 58px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 16px;
+      top: 18px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .step strong { display: block; margin-bottom: 4px; }
+    .step span { color: var(--muted); }
+
+    .visual {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .visual svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .prompt {
+      overflow: hidden;
+      box-shadow: none;
+      margin: 14px 0;
+    }
+
+    .prompt-title {
+      padding: 10px 14px;
+      background: #eef3fb;
+      border-bottom: 1px solid var(--line);
+      font-weight: 800;
+    }
+
+    pre {
+      margin: 0;
+      padding: 16px;
+      overflow-x: auto;
+      color: #f8fafc;
+      background: #111827;
+      line-height: 1.55;
+      border-radius: 0;
+    }
+
+    code {
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      font-size: 0.94em;
+    }
+
+    .mini-flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .flow-item {
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 8px;
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .flow-item small {
+      display: block;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      padding: 24px 18px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .hero-cards,
+      .grid-2,
+      .grid-3,
+      .mini-flow {
+        grid-template-columns: 1fr;
+      }
+
+      section { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">小白版 · 图文科普 · Molly 专用</span>
+      <h1>用 Codex 帮 Molly 做科研和数据分析</h1>
+      <p class="subtitle">不用先学命令行，也不用先懂很多技术。你只要会打开软件、选择文件夹、把需求说清楚，就可以让 Codex 帮你整理数据、读文献、写草稿、画图和检查结果。</p>
+
+      <div class="hero-cards">
+        <div class="card">
+          <div class="icon">1</div>
+          <h3>先安装</h3>
+          <p>去官网下载安装包，双击 exe 安装。</p>
+        </div>
+        <div class="card">
+          <div class="icon">2</div>
+          <h3>选文件夹</h3>
+          <p>把数据、论文、报告都放进一个项目文件夹。</p>
+        </div>
+        <div class="card">
+          <div class="icon">3</div>
+          <h3>说清任务</h3>
+          <p>告诉 Codex 你要看数据、读文献、写报告还是画图。</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>1. Codex 是什么？一句话讲明白</h2>
+      <div class="grid-2">
+        <div>
+          <p>Codex 可以理解为一个会看文件、会写代码、会整理报告的电脑助手。它不是“替你写完所有东西的人”，而是帮你把麻烦步骤做快一点。</p>
+          <div class="note green">
+            <strong>你可以让它做：</strong>检查表格、清洗数据、生成图表、总结文献、改写段落、检查报告问题。
+          </div>
+          <div class="note rose">
+            <strong>你不能完全交给它：</strong>最终结论、引用真假、数据是否合理、论文是否符合导师要求。
+          </div>
+        </div>
+        <div class="visual" aria-label="Codex 工作示意图">
+          <svg viewBox="0 0 640 360" role="img">
+            <rect width="640" height="360" rx="24" fill="#f8fbff"/>
+            <rect x="56" y="58" width="190" height="244" rx="18" fill="#eaf1ff" stroke="#b8ccff"/>
+            <text x="151" y="98" text-anchor="middle" font-size="24" font-weight="700" fill="#1d4ed8">Molly</text>
+            <circle cx="151" cy="154" r="42" fill="#2563eb"/>
+            <text x="151" y="164" text-anchor="middle" font-size="36" fill="#fff">人</text>
+            <text x="151" y="230" text-anchor="middle" font-size="18" fill="#475467">提出问题</text>
+            <text x="151" y="260" text-anchor="middle" font-size="18" fill="#475467">判断结果</text>
+            <rect x="394" y="58" width="190" height="244" rx="18" fill="#e7f7f3" stroke="#9bd7ca"/>
+            <text x="489" y="98" text-anchor="middle" font-size="24" font-weight="700" fill="#0f766e">Codex</text>
+            <rect x="444" y="126" width="90" height="62" rx="10" fill="#0f766e"/>
+            <circle cx="466" cy="148" r="6" fill="#fff"/>
+            <circle cx="512" cy="148" r="6" fill="#fff"/>
+            <path d="M468 170 Q489 184 510 170" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <text x="489" y="230" text-anchor="middle" font-size="18" fill="#475467">整理文件</text>
+            <text x="489" y="260" text-anchor="middle" font-size="18" fill="#475467">生成草稿</text>
+            <path d="M258 150 H378" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+            <path d="M364 132 L388 150 L364 168" fill="none" stroke="#2563eb" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M382 214 H262" stroke="#0f766e" stroke-width="8" stroke-linecap="round"/>
+            <path d="M276 196 L252 214 L276 232" fill="none" stroke="#0f766e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. 安装：用网站 exe，不用命令行</h2>
+      <p>小白版安装只走官网下载安装包。不要先学终端，不要复制命令，先把软件装起来。</p>
+      <div class="steps">
+        <div class="step">
+          <strong>打开官网 Quickstart</strong>
+          <span>访问 <a href="https://developers.openai.com/codex/quickstart">https://developers.openai.com/codex/quickstart</a>。</span>
+        </div>
+        <div class="step">
+          <strong>找到 Codex App 的下载入口</strong>
+          <span>选择 Windows 版本，下载网页提供的安装程序。优先选择官网页面上的 Windows 安装包或下载按钮。</span>
+        </div>
+        <div class="step">
+          <strong>双击 exe 安装</strong>
+          <span>下载完成后，打开安装包，按提示下一步安装。如果系统弹出安全确认，确认来源是官网后继续。</span>
+        </div>
+        <div class="step">
+          <strong>打开 Codex 并登录</strong>
+          <span>用你的 ChatGPT/OpenAI 账号登录。第一次打开时，选择一个项目文件夹。</span>
+        </div>
+      </div>
+      <div class="visual" aria-label="下载安装示意图">
+        <svg viewBox="0 0 800 300" role="img">
+          <rect width="800" height="300" rx="24" fill="#ffffff"/>
+          <rect x="36" y="38" width="220" height="200" rx="16" fill="#eaf1ff" stroke="#b8ccff"/>
+          <text x="146" y="82" text-anchor="middle" font-size="22" font-weight="700" fill="#1d4ed8">官网页面</text>
+          <rect x="76" y="122" width="140" height="46" rx="23" fill="#2563eb"/>
+          <text x="146" y="153" text-anchor="middle" font-size="18" fill="#fff">下载 Windows</text>
+          <path d="M278 138 H374" stroke="#98a2b3" stroke-width="8" stroke-linecap="round"/>
+          <path d="M360 120 L388 138 L360 156" fill="none" stroke="#98a2b3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="408" y="38" width="140" height="200" rx="16" fill="#fff7e6" stroke="#f3c26b"/>
+          <text x="478" y="82" text-anchor="middle" font-size="22" font-weight="700" fill="#92400e">exe</text>
+          <rect x="452" y="112" width="52" height="68" rx="8" fill="#f59e0b"/>
+          <text x="478" y="154" text-anchor="middle" font-size="18" fill="#fff">安装包</text>
+          <path d="M570 138 H640" stroke="#98a2b3" stroke-width="8" stroke-linecap="round"/>
+          <path d="M626 120 L654 138 L626 156" fill="none" stroke="#98a2b3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="668" y="38" width="96" height="200" rx="16" fill="#e7f7f3" stroke="#9bd7ca"/>
+          <text x="716" y="82" text-anchor="middle" font-size="22" font-weight="700" fill="#0f766e">打开</text>
+          <circle cx="716" cy="144" r="36" fill="#0f766e"/>
+          <path d="M700 144 L712 156 L736 128" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="note amber">
+        如果官网页面后来改版，没有直接显示 exe，就按官网页面提供的 Windows 下载方式操作。安装入口以 OpenAI 官方 Quickstart 为准。
+      </div>
+    </section>
+
+    <section>
+      <h2>3. 第一次使用：只做 3 件事</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">A</div>
+          <h3>建文件夹</h3>
+          <p>例如新建一个文件夹：Molly_数据分析。</p>
+        </div>
+        <div class="card">
+          <div class="icon">B</div>
+          <h3>放资料</h3>
+          <p>把 Excel、论文 PDF、报告草稿放进去。</p>
+        </div>
+        <div class="card">
+          <div class="icon">C</div>
+          <h3>问 Codex</h3>
+          <p>让它先看文件夹，不要急着生成结果。</p>
+        </div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-title">第一次复制这句话</div>
+        <pre><code>我是小白。请先帮我看这个文件夹里有什么，并告诉我哪些是数据、哪些是论文、哪些是报告草稿。先不要修改任何文件。</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Molly 的科研文件夹长这样就够了</h2>
+      <p>不要一开始建太多文件夹。小白版只保留 5 个地方。</p>
+      <div class="visual" aria-label="文件夹结构示意图">
+        <svg viewBox="0 0 760 360" role="img">
+          <rect width="760" height="360" rx="24" fill="#ffffff"/>
+          <rect x="44" y="42" width="250" height="276" rx="18" fill="#f8fbff" stroke="#dbe3ef"/>
+          <text x="70" y="82" font-size="24" font-weight="700" fill="#182235">Molly_Project</text>
+          <g font-size="18" fill="#344054">
+            <text x="82" y="128">data 原始数据</text>
+            <text x="82" y="170">papers 论文 PDF</text>
+            <text x="82" y="212">notes 阅读笔记</text>
+            <text x="82" y="254">figures 图片图表</text>
+            <text x="82" y="296">report 报告草稿</text>
+          </g>
+          <g fill="#2563eb">
+            <rect x="60" y="112" width="14" height="14" rx="3"/>
+            <rect x="60" y="154" width="14" height="14" rx="3"/>
+            <rect x="60" y="196" width="14" height="14" rx="3"/>
+            <rect x="60" y="238" width="14" height="14" rx="3"/>
+            <rect x="60" y="280" width="14" height="14" rx="3"/>
+          </g>
+          <rect x="360" y="62" width="330" height="70" rx="16" fill="#eaf1ff" stroke="#b8ccff"/>
+          <text x="385" y="105" font-size="20" font-weight="700" fill="#1d4ed8">资料集中放，Codex 才看得懂</text>
+          <rect x="360" y="156" width="330" height="70" rx="16" fill="#e7f7f3" stroke="#9bd7ca"/>
+          <text x="385" y="199" font-size="20" font-weight="700" fill="#0f766e">原始数据不要直接改</text>
+          <rect x="360" y="250" width="330" height="70" rx="16" fill="#fff7e6" stroke="#f3c26b"/>
+          <text x="385" y="293" font-size="20" font-weight="700" fill="#92400e">每次分析都留一份说明</text>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. 数据分析：让 Codex 像助教一样帮你</h2>
+      <p>数据分析不要一上来就说“帮我分析”。要先让它看数据，再让它提建议，最后再写图表和结论。</p>
+      <div class="mini-flow">
+        <div class="flow-item">看数据<small>多少行多少列</small></div>
+        <div class="flow-item">找问题<small>缺失和重复</small></div>
+        <div class="flow-item">清洗<small>生成新表</small></div>
+        <div class="flow-item">画图<small>看趋势</small></div>
+        <div class="flow-item">解释<small>写报告</small></div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-title">看懂 Excel</div>
+        <pre><code>请帮我看这个 Excel 表格。告诉我：
+1. 有多少行、多少列；
+2. 每一列大概是什么意思；
+3. 有没有空值、重复值或奇怪的值；
+4. 如果我要做分析，下一步应该先做什么。
+
+请先不要改文件。</code></pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-title">画一张图</div>
+        <pre><code>请根据这个数据，帮我推荐一张最适合小白理解的图。
+先说明为什么选这张图，再生成图表。
+图表标题、横轴、纵轴都要写清楚。</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>6. 文献阅读：让 Codex 帮你抓重点</h2>
+      <p>读论文时，不要让 Codex 只“总结一下”。更好的方式是让它帮你找：这篇文章研究什么、用了什么数据、怎么分析、结论是什么、有什么局限。</p>
+      <div class="grid-2">
+        <div class="visual" aria-label="论文阅读卡片示意图">
+          <svg viewBox="0 0 560 360" role="img">
+            <rect width="560" height="360" rx="24" fill="#fff"/>
+            <rect x="66" y="42" width="210" height="276" rx="16" fill="#f8fbff" stroke="#dbe3ef"/>
+            <text x="96" y="84" font-size="22" font-weight="700" fill="#182235">论文 PDF</text>
+            <line x1="96" y1="122" x2="246" y2="122" stroke="#98a2b3" stroke-width="8" stroke-linecap="round"/>
+            <line x1="96" y1="160" x2="228" y2="160" stroke="#98a2b3" stroke-width="8" stroke-linecap="round"/>
+            <line x1="96" y1="198" x2="240" y2="198" stroke="#98a2b3" stroke-width="8" stroke-linecap="round"/>
+            <line x1="96" y1="236" x2="210" y2="236" stroke="#98a2b3" stroke-width="8" stroke-linecap="round"/>
+            <path d="M292 180 H350" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+            <path d="M338 162 L362 180 L338 198" fill="none" stroke="#2563eb" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="382" y="58" width="128" height="244" rx="16" fill="#e7f7f3" stroke="#9bd7ca"/>
+            <text x="446" y="94" text-anchor="middle" font-size="22" font-weight="700" fill="#0f766e">笔记卡</text>
+            <text x="406" y="140" font-size="17" fill="#344054">问题</text>
+            <text x="406" y="180" font-size="17" fill="#344054">方法</text>
+            <text x="406" y="220" font-size="17" fill="#344054">结论</text>
+            <text x="406" y="260" font-size="17" fill="#344054">局限</text>
+          </svg>
+        </div>
+        <div>
+          <div class="prompt">
+            <div class="prompt-title">论文阅读小白提示词</div>
+            <pre><code>请用小白能懂的话帮我读这篇论文。
+
+请回答：
+1. 这篇论文想解决什么问题？
+2. 它用了什么数据或材料？
+3. 它用了什么研究方法？
+4. 最重要的结论是什么？
+5. 这篇论文有什么不足？
+6. 哪些内容可以放进我的论文或报告？
+
+不要编造原文没有的信息。</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>7. 论文撰写：先搭骨架，再写句子</h2>
+      <p>小白写论文最容易卡住，是因为一上来就想写完整段落。更简单的方法是先让 Codex 搭一个“骨架”。</p>
+      <div class="mini-flow">
+        <div class="flow-item">题目<small>写什么</small></div>
+        <div class="flow-item">背景<small>为什么重要</small></div>
+        <div class="flow-item">方法<small>怎么做</small></div>
+        <div class="flow-item">结果<small>发现什么</small></div>
+        <div class="flow-item">讨论<small>说明什么</small></div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-title">写作骨架提示词</div>
+        <pre><code>我现在要写一份小论文/研究报告。
+主题是：【写你的主题】。
+我已有的数据/图表是：【简单说明】。
+我读过的文献大概说：【简单说明】。
+
+请先帮我搭一个小白能照着写的提纲。
+不要直接写完整论文。</code></pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-title">改写段落提示词</div>
+        <pre><code>请把下面这段话改得更像论文语言，但不要增加新事实，不要夸大结论。
+
+原文：
+【粘贴你的段落】</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>8. 最重要的安全线：别让 AI 替你做判断</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">查</div>
+          <h3>查引用</h3>
+          <p>论文、作者、年份、数据都要回到原文确认。</p>
+        </div>
+        <div class="card">
+          <div class="icon">看</div>
+          <h3>看数据</h3>
+          <p>结果好不好看不重要，数据是否真实合理更重要。</p>
+        </div>
+        <div class="card">
+          <div class="icon">问</div>
+          <h3>问自己</h3>
+          <p>这句话有没有证据？这张图有没有误导？</p>
+        </div>
+      </div>
+      <div class="note amber">
+        最简单的检查方法：凡是 Codex 写出的结论，都问一句“这句话来自哪个数据、哪张图、哪篇论文？”
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    安装入口以 OpenAI 官方 Quickstart 为准：<a href="https://developers.openai.com/codex/quickstart">developers.openai.com/codex/quickstart</a>。本页面是 Molly 小白科普版。
+  </footer>
+</body>
+</html>
